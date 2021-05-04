@@ -4,6 +4,8 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
+use app\http\controllers\AdminUsersController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -27,3 +29,9 @@ Route::get('/', function () {
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->name('dashboard');
+
+
+// example
+// Route::get('admin/users', [AdminUsersController::class, 'index']);
+
+Route::resource('admin/users', AdminUsersController::class);
