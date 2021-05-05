@@ -4,7 +4,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-use app\http\controllers\AdminUsersController;
+use App\Http\Controllers\AdminUsersController;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,3 +35,8 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
 // Route::get('admin/users', [AdminUsersController::class, 'index']);
 
 Route::resource('admin/users', AdminUsersController::class);
+// Route::resource('admin/users', 'App\Http\Controllers\AdminUsersController');
+
+Route::get('/admin', function(){
+    return view('admin.index');
+});
