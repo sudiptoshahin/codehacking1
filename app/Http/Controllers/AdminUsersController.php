@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Requests\UsersRequest;
 use App\Models\User;
 use App\Models\Role;
 
@@ -41,10 +42,23 @@ class AdminUsersController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(UsersRequest $request)
     {
         // storing to databases
-        return $request->all();
+
+        // User::create($request->all());
+
+        $user = new User();
+        $user->role_id = $request->role_id;
+        $user->is_active = $request->is_active;
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->password = $request->password;
+        $user->photo_id = $request->photo_id;
+        $user->save();
+
+        return redirect('/admin/users');
+        // return $request->all();
     }
 
     /**
