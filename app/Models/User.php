@@ -62,7 +62,15 @@ class User extends Authenticatable
         'profile_photo_url',
     ];
 
+
+    //  users role
     public function role(){
         return $this->belongsTo('App\Models\Role');
+    }
+
+
+    // users photo
+    public function photo(){
+        return $this->belongsTo('App\Models\Photo');
     }
 }

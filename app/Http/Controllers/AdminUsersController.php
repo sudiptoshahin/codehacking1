@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\UsersRequest;
 use App\Models\User;
 use App\Models\Role;
+use App\Models\Photo;
 
 class AdminUsersController extends Controller
 {
@@ -53,8 +54,16 @@ class AdminUsersController extends Controller
         $user->is_active = $request->is_active;
         $user->name = $request->name;
         $user->email = $request->email;
-        $user->password = $request->password;
-        $user->photo_id = $request->photo_id;
+        $user->password = bcrypt($request->password);
+        
+        if($file = $request->file('photo_id')) {
+            $name = time().$file->getClientOriginalName();
+            $file->move('images/', $name);
+            $photo = Photo::create(['file'=>$name]);
+
+            $user->photo_id = $photo->id;
+        }
+        
         $user->save();
 
         return redirect('/admin/users');
