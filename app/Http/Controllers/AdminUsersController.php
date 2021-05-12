@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Requests\UsersRequest;
+use App\Http\Requests\UsersEditRequest;
 use App\Models\User;
 use App\Models\Role;
 use App\Models\Photo;
@@ -49,6 +50,17 @@ class AdminUsersController extends Controller
 
         // User::create($request->all());
 
+        if(trim($request->password) == '') {
+            $user->password = $request->except('password');
+        } else {
+            $user->role_id = $request->role_id;
+            $user->is_active = $request->is_active;
+            $user->name = $request->name;
+            $user->email = $request->email;
+            $user->password = bcrypt($request->password);
+
+        }
+
         $user = new User();
         $user->role_id = $request->role_id;
         $user->is_active = $request->is_active;
@@ -78,6 +90,8 @@ class AdminUsersController extends Controller
      */
     public function show($id)
     {
+
+
         return view('admin.users.show');
     }
 
@@ -89,7 +103,10 @@ class AdminUsersController extends Controller
      */
     public function edit($id)
     {
-        return view('admin.users.edit');
+        $roles = Role::pluck('name', 'id')->all();
+        $user = User::findOrFail($id);
+
+        return view('admin.users.edit', compact('user', 'roles'));
     }
 
     /**
@@ -99,9 +116,26 @@ class AdminUsersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UsersEditRequest $request, $id)
     {
-        //
+        $user = User::findOrFail($id);
+
+        $input = $request->all();
+
+        if($file = $request->file('photo_id')) {
+
+            $name = time() . $file->getClientOriginalName();
+            $file->move('images', $name);
+
+            $photo = Photo::create(['file'=> $name]);
+
+            $input['photo_id'] = $photo->id;
+
+        }
+
+        $user->update($input);
+
+        return redirect('/admin/users');
     }
 
     /**

@@ -36,7 +36,7 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
 
 // Route::resource('admin/users', 'App\Http\Controllers\AdminUsersController');
 
-Route::get('/admin', function(){
+Route::POST('/admin', function(){
     return view('admin.index');
 });
 

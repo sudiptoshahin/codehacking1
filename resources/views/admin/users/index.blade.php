@@ -8,6 +8,7 @@
         <thead>
           <tr>
             <th scope="col">Id</th>
+            <th scope="col">Photo</th>
             <th scope="col">Name</th>
             <th scope="col">Email</th>
             <th scope="col">Role</th>
@@ -23,7 +24,10 @@
             @foreach ($users as $user)
                 <tr>
                     <td>{{ $user->id }}</td>
-                    <td>{{ $user->name }}</td>
+
+                    <td><img height="35" width="50" src="{{ $user->photo ? $user->photo->file : '/images/broke-image.png' }}" alt="" srcset=""></td>
+
+                    <td><a href="{{ url('admin/users/'.$user->id.'/edit') }}"> {{ $user->name }} </a></td>
                     <td>{{ $user->email }}</td>
                     <td>{{ $user->role->name }}</td>
                     <td>{{ $user->is_active == 1 ? 'Active' : 'Not active'}}</td>
