@@ -3,7 +3,6 @@
 @section('content')
     <h1>Edit users</h1>  
 
-    <div class="container">
         <div class="row">
             <div class="col-3 col-lg-3 col-sm-3">
                 <img src="{{ $user->photo ? $user->photo->file : 'http://placehold.it/400x400' }}" alt="" class="img-responsive img-round">
@@ -44,10 +43,17 @@
             
         
             <div class='form-group'>
-                {!! Form::submit('Update user', ['class'=> 'btn btn-primary']) !!}
+                {!! Form::submit('Update user', ['class'=> 'btn btn-primary col-sm-6']) !!}
             </div>
-        
             {!! Form::close() !!}
+
+            {{-- delete users --}}
+            {!! Form::open(['method'=> 'DELETE', 'action'=> ['App\Http\Controllers\AdminUsersController@destroy', $user->id]]) !!}
+                <div class="form-group">
+                    {!! Form::submit('Delete user', ['class'=>'btn btn-danger col-sm-6']) !!}
+                </div>
+            {!! Form::close() !!}
+        
             </div>
         </div>
 
@@ -56,8 +62,6 @@
         <div class="row">
             @include('includes.form_errors');
         </div>
-
-    </div>
     
 
 @endsection

@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 use App\Http\Controllers\AdminUsersController;
+use App\Http\Controllers\AdminPostsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,9 +37,17 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
 
 // Route::resource('admin/users', 'App\Http\Controllers\AdminUsersController');
 
-Route::POST('/admin', function(){
+Route::get('/admin', function(){
     return view('admin.index');
 });
 
 
-Route::resource('admin/users', AdminUsersController::class);
+Route::group(['middleware'=> 'admin'], function(){
+
+    //  admin users
+    Route::resource('admin/users', AdminUsersController::class);
+
+    //  admins post
+    Route::resource('admin/posts', AdminPostsController::class);
+
+});

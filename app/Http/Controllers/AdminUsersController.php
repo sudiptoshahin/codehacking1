@@ -8,6 +8,7 @@ use App\Http\Requests\UsersEditRequest;
 use App\Models\User;
 use App\Models\Role;
 use App\Models\Photo;
+use Auth;
 
 class AdminUsersController extends Controller
 {
@@ -19,7 +20,6 @@ class AdminUsersController extends Controller
     public function index()
     {
         $users = User::all();
-
 
         return view('admin.users.index', compact('users'));
     }
@@ -50,6 +50,9 @@ class AdminUsersController extends Controller
 
         // User::create($request->all());
 
+        
+        $user = new User();
+
         if(trim($request->password) == '') {
             $user->password = $request->except('password');
         } else {
@@ -61,12 +64,11 @@ class AdminUsersController extends Controller
 
         }
 
-        $user = new User();
-        $user->role_id = $request->role_id;
-        $user->is_active = $request->is_active;
-        $user->name = $request->name;
-        $user->email = $request->email;
-        $user->password = bcrypt($request->password);
+        // $user->role_id = $request->role_id;
+        // $user->is_active = $request->is_active;
+        // $user->name = $request->name;
+        // $user->email = $request->email;
+        // $user->password = bcrypt($request->password);
         
         if($file = $request->file('photo_id')) {
             $name = time().$file->getClientOriginalName();
@@ -146,6 +148,16 @@ class AdminUsersController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $user = User::findOrFail($id);
+        
+        //  delete users profile picture
+        unlink(public_path(). $user->photo->file);
+        $user->delete();
+        
+
+        session()->flash('deleted_user', 'The user has been deleted');
+        
+        return redirect('/admin/users');
     }
 }
+ 

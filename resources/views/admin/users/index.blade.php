@@ -1,8 +1,13 @@
 @extends('layouts.admin')
 
 @section('content')
-    <h1>Users</h1>
 
+
+  @if (session()->has('deleted_user'))
+    <h3 class="bg-danger"> {{ session('deleted_user') }} </h3>
+  @endif
+
+  <h1>Users</h1>
 
     <table class="table table-striped table-dark">
         <thead>
